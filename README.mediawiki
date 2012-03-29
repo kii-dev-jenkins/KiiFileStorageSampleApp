@@ -1,0 +1,22 @@
+== Sync SDK ==
+
+[[File:http://static.kii.com/hm/img/sync.png|Overview of Sync SDK]]
+
+[http://static.kii.com/hm/FileSyncSDK/ Javadoc for Sync SDK]
+
+== Sample App == 
+
+A sample application that demonstrate how to use Kii Sync technology for backup files, restore files and trash files. 
+
+Using sync sdk, developer just focus on developing the application logic and leave the data management to sdk. &nbsp; 
+
+== Overview of Software Components == 
+
+[[File:http://static.kii.com/hm/img/SyncSampleComponentsOverview.png|Overview of Sample App Software Components]]
+
+
+== Screen shots == 
+ 
+[[File:http://static.kii.com/hm/img/DeviceTab.png|List Device Files]]
+[[File:http://static.kii.com/hm/img/CloudTab.png|List Cloud Files]]
+[[File:http://static.kii.com/hm/img/ProgressUI.png|List Files in progress]]

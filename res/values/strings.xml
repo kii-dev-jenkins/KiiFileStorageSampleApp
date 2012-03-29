@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Kii Demo App for Astro</string>
+	<string name="app_name">KiiCloudStorage2</string>
+	<string name="spinner_prompt">Choose a sample</string>
+
+	<string name="msg_ERROR_RECORD_NOT_FOUND">The file is not found on device.</string>
+	<string name="msg_ERROR_LOGIN_ERROR">Invalid password or username.</string>
+	<string name="msg_ERROR_AUTHENTICAION_ERROR">Invalid password or username. Username can be email
+		address(e.g. support@kii.com) or phone number(e.g. +1 650 240-0431).
+	</string>
+	<string name="msg_ERROR_NO_ACCOUNT">Sorry, you must be Logged in.</string>
+	<string name="msg_ERROR_DIFFERENT_USERNAME">Trying to Log In with a different email address is
+		not allowed.</string>
+	<string name="msg_ERROR_NON_VERIFIED_USERNAME">A verification email or SMS has been sent to you.
+		Please click on the verification link to activate your account.
+	</string>
+	<string name="msg_ERROR_ALREADY_KII_USER">The account is already registered.</string>
+	<string name="msg_ERROR_ALREADY_KII_USER_SHARE">There is already a registered user with that
+		information, please Log In.</string>
+	<string name="msg_ERROR_INVALID_INPUT">Incorrect/invalid input.</string>
+	<string name="msg_ERROR_NO_CONNECTION">No Internet connection.</string>
+	<string name="msg_ERROR_NO_HOST">Can\'t locate the server.</string>
+	<string name="msg_ERROR_TIMEOUT">Internet connection timeout.</string>
+	<string name="msg_ERROR_IO">Internet connection error (IO Exception).</string>
+	<string name="msg_ERROR_PROTOCOL">Internet connection error (Protocol Exception).
+	</string>
+	<string name="msg_ERROR_SERVER_HARD_ERROR">Server error.</string>
+	<string name="msg_ERROR_SERVER_TEMP_ERROR">Server temporary error.</string>
+	<string name="msg_ERROR_GET_SITE_ERROR">Server error (GetSite Exception).</string>
+	<string name="msg_ERROR_GET_ACCOUNTS">Server error (Accounts retrieval Exception).
+	</string>
+	<string name="msg_ERROR_JSON">Protocol error (JSON Exception).</string>
+	<string name="msg_ERROR_OTHERS">Unknown Error(%d).</string>
+	<string name="msg_ERROR_UPLOAD_FILES">Upload File Error.</string>
+	<string name="msg_invalid_sms_verification">Invalid verification message, error code(%d).
+	</string>
+
+	<string name="msg_ERROR_FORCE_STOP">Sync cancel by user.</string>
+	<string name="msg_ERROR_BUSY">An existing sync is progress, please try again later.</string>
+	<string name="sync_progress_notification">Sync in progress.</string>
+	<string name="download_progress_notification">Downloading&#8230;</string>
+	<string name="pref_sync_mode">Sync Mode</string>
+	<string name="pref_sync_periodical">Periodical Time</string>
+	<string name="pref_wifi_only">WIFI Only</string>
+	<string name="tab_cloud">Cloud</string>
+	<string name="tab_device">Device</string>
+	<string name="menu_item_upload_file">Upload File</string>
+	<string name="menu_item_upload_folder">Upload Folder</string>
+	<string name="menu_item_move_to_trash">Move to Trash</string>
+	<string name="menu_item_download_all">Download All</string>
+    <string name="sync">Sync</string>
+    <string name="header_btn_home">Home</string>
+    <string name="header_btn_up">Up</string>
+    <string name="header_text_path">Path: </string>
+    <string name="header_upload">Dn/Uploads</string>
+    <string name="none">None</string>
+    <string name="button_refresh">Refresh</string>
+    <string name="msg_empty_upload_view">Completed all upload and download</string>
+    <string name="msg_empty_file_pciker_view">No files or directories</string>
+    <string name="cancel">Cancel</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="scan_change">Scan</string>
+    <string name="settings">Settings</string>
+    <string name="download_all">Download All</string>
+    <string name="error_cannot_trash_server_file">Cannot trash server file!</string>
+    <string name="cancel_upload">Cancel upload</string>
+    <string name="delete_backup_copy">Delete backup copy</string>
+    <string name="delete_local_backup">Delete local and backup</string>
+    <string name="move_to_trash">Move to trash</string>
+    <string name="restore_from_trash">Restore from trash</string>
+    <string name="download">Download</string>
+    <string name="no_last_sync_time">No sync performed</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="login_success">Login Success</string>
+    <string name="register_success">Register Success</string>
+</resources>
