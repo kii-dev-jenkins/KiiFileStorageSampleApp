@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.kii.cloud.engine.KiiCloudClient;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.callback.KiiUserCallBack;
+import com.kii.cloud.storage.exception.CloudExecutionException;
 import com.kii.demo.R;
 import com.kii.demo.utils.UiUtils;
 
@@ -324,17 +325,34 @@ public class StartActivity extends Activity {
                 mProgressDialog.dismiss();
             }
             Log.d(TAG, "onTaskCompleted, success? " + success);
-            if (!success) {
-                Toast.makeText(mActivity, exception.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                updateView();
-            } else {
+            if (success) {
                 Toast.makeText(mActivity,
                         mActivity.getString(R.string.login_success),
                         Toast.LENGTH_SHORT);
                 Intent intent = new Intent(mActivity, FragmentTabsPager.class);
                 mActivity.startActivity(intent);
                 finish();
+            } else {
+                if (exception instanceof CloudExecutionException) {
+                    CloudExecutionException cloudException = (CloudExecutionException) exception;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Error:" + cloudException.getError());
+                    sb.append("\n\n");
+                    sb.append("Exception:" + cloudException.getException());
+                    sb.append("\n\n");
+                    sb.append("Error Details:"
+                            + cloudException.getErrorDetails());
+                    String msg = sb.toString();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            StartActivity.this);
+                    builder.setTitle("LogIn Failed")
+                            .setMessage(msg)
+                            .setNegativeButton(
+                                    getString(android.R.string.ok), null)
+                            .show();
+                }
+
+                updateView();
             }
         }
 
@@ -356,8 +374,24 @@ public class StartActivity extends Activity {
                         Toast.LENGTH_LONG).show();
                 updateView();
             } else {
-                Toast.makeText(mActivity, exception.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                if (exception instanceof CloudExecutionException) {
+                    CloudExecutionException cloudException = (CloudExecutionException) exception;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Error:" + cloudException.getError());
+                    sb.append("\n\n");
+                    sb.append("Exception:" + cloudException.getException());
+                    sb.append("\n\n");
+                    sb.append("Error Details:"
+                            + cloudException.getErrorDetails());
+                    String msg = sb.toString();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            StartActivity.this);
+                    builder.setTitle("Register Failed")
+                            .setMessage(msg)
+                            .setNegativeButton(
+                                    getString(android.R.string.ok), null)
+                            .show();
+                }
                 updateView();
             }
         }
