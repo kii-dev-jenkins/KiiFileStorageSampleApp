@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="KiiSyncSampleApp" default="help">
+<project name="KiiFileStorageSampleApp" default="help">
     <!-- Add by Kii -->
     <property name="svn" value="svn" />
     <property file="${sign.properties}" />
     <property name="kii.absolute.dir" location="." />
 
     <target name="package-src">
-        <zip destfile="KiiSyncSampleApp-src-r${svnversion}.zip">
-            <zipfileset prefix="KiiSyncSampleApp"
+        <zip destfile="KiiFileStorageSampleApp-src-r${svnversion}.zip">
+            <zipfileset prefix="KiiFileStorageSampleApp"
                 dir="."
                 excludes="gen/, bin/" />
         </zip>
