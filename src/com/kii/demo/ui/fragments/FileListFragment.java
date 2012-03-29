@@ -2,6 +2,7 @@ package com.kii.demo.ui.fragments;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.kii.cloud.engine.Constants;
 import com.kii.cloud.engine.KiiCloudClient;
 import com.kii.cloud.storage.KiiFile;
+import com.kii.cloud.storage.exception.CloudExecutionException;
 import com.kii.demo.R;
 import com.kii.demo.ui.view.ActionItem;
 import com.kii.demo.ui.view.KiiListItemView;
@@ -136,12 +138,6 @@ public class FileListFragment extends ListFragment {
         }
     }
 
-    private void moveToTrash(File file) {
-        KiiCloudClient client = KiiCloudClient.getInstance(getActivity());
-        KiiFile f = new KiiFile(file, Constants.ANDROID_EXT);
-        client.moveKiiFileToTrash(f);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(0, OPTIONS_MENU_SCAN_CHANGE, 0, R.string.scan_change);
@@ -156,12 +152,35 @@ public class FileListFragment extends ListFragment {
                 new ScanTask().execute();
                 break;
             case OPTIONS_MENU_DOWNLOAD_ALL:
-                //TODO: implement it, don't need BackupService
+                downloadAll();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void downloadAll() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<KiiFile> files = KiiFile
+                            .listWorkingFiles(Constants.ANDROID_EXT);
+                    for (KiiFile file : files) {
+                        KiiCloudClient.getInstance(getActivity()).download(
+                                file, null);
+                    }
+                } catch (CloudExecutionException e) {
+                    // TODO: Fix this - auto generated
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO: Fix this - auto generated
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 
     @Override
@@ -335,9 +354,6 @@ public class FileListFragment extends ListFragment {
                         mQuickAction.addActionItem(new ActionItem(
                                 ACTION_ITEM_UPLOAD,
                                 getString(R.string.menu_item_upload_file)));
-                        mQuickAction.addActionItem(new ActionItem(
-                                ACTION_ITEM_MOVE_TO_TRASH,
-                                getString(R.string.menu_item_move_to_trash)));
                     } else if (f.isDirectory()) {
                         mQuickAction.addActionItem(new ActionItem(
                                 ACTION_ITEM_UPLOAD_FOLDER,
@@ -351,9 +367,6 @@ public class FileListFragment extends ListFragment {
                                     switch (actionId) {
                                         case ACTION_ITEM_UPLOAD:
                                             uploadFile(f);
-                                            break;
-                                        case ACTION_ITEM_MOVE_TO_TRASH:
-                                            moveToTrash(f);
                                             break;
                                         case ACTION_ITEM_UPLOAD_FOLDER:
                                             uploadFolder(f);
@@ -369,7 +382,6 @@ public class FileListFragment extends ListFragment {
         }
     };
 
-    private static final int ACTION_ITEM_MOVE_TO_TRASH = 0;
     private static final int ACTION_ITEM_UPLOAD = 1;
     private static final int ACTION_ITEM_UPLOAD_FOLDER = 2;
 
@@ -402,7 +414,6 @@ public class FileListFragment extends ListFragment {
                 scanDialog = null;
             }
             if (!scanChange.isEmpty()) {
-                // TODO: let fragment activity to show dialog;
                 getActivity().showDialog(DIALOG_UPDATE);
             } else {
                 UiUtils.showToast(getActivity(), "No update is found.");
