@@ -102,6 +102,9 @@ public class MimeUtil {
                 "video/webm"));
         fileIcons.put("m4v", new MimeInfo(R.drawable.icon_format_video,
                 "video/x-m4v"));
+        fileIcons.put("mov", new MimeInfo(R.drawable.icon_format_video,
+                "video/quicktime"));
+
 
         fileIcons.put("au", new MimeInfo(R.drawable.icon_format_audio,
                 "audio/basic"));
