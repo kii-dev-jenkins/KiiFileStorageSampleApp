@@ -399,8 +399,35 @@ public class StartActivity extends Activity {
         @Override
         public void onChangePasswordCompleted(int token, boolean success,
                 Exception exception) {
-            // TODO Auto-generated method stub
-            super.onChangePasswordCompleted(token, success, exception);
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+            }
+            if (success) {
+                Toast.makeText(mActivity,
+                        mActivity.getString(R.string.change_password_success),
+                        Toast.LENGTH_LONG).show();
+                updateView();
+            } else {
+                if (exception instanceof CloudExecutionException) {
+                    CloudExecutionException cloudException = (CloudExecutionException) exception;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Error:" + cloudException.getError());
+                    sb.append("\n\n");
+                    sb.append("Exception:" + cloudException.getException());
+                    sb.append("\n\n");
+                    sb.append("Error Details:"
+                            + cloudException.getErrorDetails());
+                    String msg = sb.toString();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            StartActivity.this);
+                    builder.setTitle("Change Password Failed")
+                            .setMessage(msg)
+                            .setNegativeButton(
+                                    getString(android.R.string.ok), null)
+                            .show();
+                }
+                updateView();
+            }
         }
 
     }
