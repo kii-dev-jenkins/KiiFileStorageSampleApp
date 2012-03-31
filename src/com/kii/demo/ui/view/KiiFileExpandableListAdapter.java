@@ -50,6 +50,7 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public void notifyDataSetChanged() {
         itemsList = new ArrayList<KiiFileList>();
+        ICON_CACHE.clear();
         addDataSet(itemsList);
         super.notifyDataSetChanged();
     }

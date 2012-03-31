@@ -78,7 +78,6 @@ public class CloudCallback extends KiiFileCallBack {
     private void showTaskCompleteToast(int token, boolean success) {
         if (mTokenMap.containsKey(token)) {
             int action = mTokenMap.get(token);
-            Log.d(TAG, "action is " + action);
             Toast.makeText(mContext,
                     Utils.getUserActionString(action, success),
                     Toast.LENGTH_SHORT).show();
