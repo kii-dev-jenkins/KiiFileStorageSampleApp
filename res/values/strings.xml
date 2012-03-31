@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Kii Demo App for Astro</string>
-	<string name="app_name">KiiCloudStorage2</string>
+	<string name="app_name">KiiFileStorage</string>
 	<string name="spinner_prompt">Choose a sample</string>
 
 	<string name="msg_ERROR_RECORD_NOT_FOUND">The file is not found on device.</string>
@@ -71,7 +71,7 @@
     <string name="move_to_trash">Move to trash</string>
     <string name="restore_from_trash">Restore from trash</string>
     <string name="download">Download</string>
-    <string name="no_last_sync_time">No sync performed</string>
+    <string name="no_last_sync_time"></string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>

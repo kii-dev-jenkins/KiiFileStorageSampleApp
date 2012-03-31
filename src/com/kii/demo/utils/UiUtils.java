@@ -65,7 +65,7 @@ public class UiUtils {
         BackupPref.init(context);
         long backupTime = BackupPref.getLastRefreshTime();
         if (backupTime > 0) {
-            return String.format("Last successful sync is %s",
+            return String.format("Last successful refresh is %s",
                     (String) DateUtils.getRelativeTimeSpanString(backupTime,
                             System.currentTimeMillis(),
                             DateUtils.MINUTE_IN_MILLIS,
