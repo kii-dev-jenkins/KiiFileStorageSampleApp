@@ -20,6 +20,7 @@ import android.provider.MediaStore.Video;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kii.cloud.engine.ActionType;
 import com.kii.cloud.engine.TaskType;
 import com.kii.cloud.storage.KiiFile;
 import com.kii.cloud.storage.utils.FileUtils;
@@ -263,21 +264,23 @@ public class Utils {
     }
 
     private static String getUserActionString(int type) {
-//        switch (type) {
-//            case UserResult.ACTION_TYPE_CREATED_COMPLETED:
-//                return "Register";
-//            case UserResult.ACTION_TYPE_DELETE_COMPLETED:
-//                return "Delete";
-//            case UserResult.ACTION_TYPE_LOGIN_COMPLETED:
-//                return "Log in";
-//            case UserResult.ACTION_TYPE_RESETPWD_COMPLETED:
-//                return "Reset password";
-//            case UserResult.ACTION_TYPE_UPDATED_COMPLETED:
-//                return "Update info";
-//            default:
-//                return "";
-//        }
-        //TODO
+        switch(type) {
+            case ActionType.ACTION_DOWNLOAD:
+                return "Download";
+            case ActionType.ACTION_LIST_FILES:
+            case ActionType.ACTION_LIST_TRASH:
+                return "List";
+            case ActionType.ACTION_RESTORE:
+                return "Restore";
+            case ActionType.ACTION_TRASH:
+                return "trash";
+            case ActionType.ACTION_UPDATE:
+                return "Update";
+            case ActionType.ACTION_UPLOAD:
+                return "Upload";
+            default:
+                break;
+        }
         return "";
     }
     
