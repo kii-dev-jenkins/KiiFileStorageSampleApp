@@ -41,6 +41,20 @@ public class CloudCallback extends KiiFileCallBack {
         if (mUploadQueue.containsKey(token)) {
             mUploadQueue.remove(token);
         }
+        final KiiFile f = file;
+        if (!success) {
+            // delete the uploaded kiifile
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        f.delete();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 
     @Override
@@ -64,6 +78,7 @@ public class CloudCallback extends KiiFileCallBack {
     private void showTaskCompleteToast(int token, boolean success) {
         if (mTokenMap.containsKey(token)) {
             int action = mTokenMap.get(token);
+            Log.d(TAG, "action is " + action);
             Toast.makeText(mContext,
                     Utils.getUserActionString(action, success),
                     Toast.LENGTH_SHORT).show();
