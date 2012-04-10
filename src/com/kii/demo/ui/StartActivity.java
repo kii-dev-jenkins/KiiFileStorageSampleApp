@@ -111,7 +111,7 @@ public class StartActivity extends Activity {
         mLogout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                lougoutDemo();
+                logoutDemo();
             }
         });
 
@@ -149,7 +149,7 @@ public class StartActivity extends Activity {
             if (i.getAction().compareToIgnoreCase(ACTION_ENTER_PASSWORD) == 0) {
                 updatePwd();
             } else if (i.getAction().compareToIgnoreCase(ACTION_LOGOUT) == 0) {
-                lougoutDemo();
+                logoutDemo();
             }
         }
         mUserCallback = new UserCallback();
@@ -282,11 +282,12 @@ public class StartActivity extends Activity {
     }
 
     private void changePwd(String newPassword, String oldPassword) {
+        mPwd.setText(newPassword);
         KiiCloudClient.getInstance(this).changePassword(mUserCallback,
                 newPassword, oldPassword);
     }
 
-    private void lougoutDemo() {
+    private void logoutDemo() {
         KiiCloudClient.getInstance(this).logout();
         updateView();
     }
