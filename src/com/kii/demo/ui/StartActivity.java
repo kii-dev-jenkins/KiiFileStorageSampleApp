@@ -281,7 +281,7 @@ public class StartActivity extends Activity {
         mAlertDialog.show();
     }
 
-    private void changePwd(String oldPassword, String newPassword) {
+    private void changePwd(String newPassword, String oldPassword) {
         KiiCloudClient.getInstance(this).changePassword(mUserCallback,
                 newPassword, oldPassword);
     }
