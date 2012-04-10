@@ -308,6 +308,9 @@ public class StartActivity extends Activity {
     }
 
     private void loginDemo() {
+        if(KiiSyncClient.getInstance(this).isLogin()) {
+            KiiSyncClient.getInstance(this).logout();
+        }
         KiiCloudClient.getInstance(this).login(mUserCallback,
                 mUsr.getText().toString(), mPwd.getText().toString());
         showDialog(0);
