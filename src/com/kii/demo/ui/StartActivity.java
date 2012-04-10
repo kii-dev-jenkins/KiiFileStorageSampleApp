@@ -1,20 +1,20 @@
 //
 //
-//  Copyright 2012 Kii Corporation
-//  http://kii.com
+// Copyright 2012 Kii Corporation
+// http://kii.com
 //
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//  
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 //
 
 package com.kii.demo.ui;
@@ -308,8 +308,8 @@ public class StartActivity extends Activity {
     }
 
     private void loginDemo() {
-        if(KiiSyncClient.getInstance(this).isLogin()) {
-            KiiSyncClient.getInstance(this).logout();
+        if (KiiCloudClient.getInstance(this).getloginUser() != null) {
+            KiiCloudClient.getInstance(this).logout();
         }
         KiiCloudClient.getInstance(this).login(mUserCallback,
                 mUsr.getText().toString(), mPwd.getText().toString());
@@ -369,9 +369,8 @@ public class StartActivity extends Activity {
                             StartActivity.this);
                     builder.setTitle("LogIn Failed")
                             .setMessage(msg)
-                            .setNegativeButton(
-                                    getString(android.R.string.ok), null)
-                            .show();
+                            .setNegativeButton(getString(android.R.string.ok),
+                                    null).show();
                 }
 
                 updateView();
@@ -410,9 +409,8 @@ public class StartActivity extends Activity {
                             StartActivity.this);
                     builder.setTitle("Register Failed")
                             .setMessage(msg)
-                            .setNegativeButton(
-                                    getString(android.R.string.ok), null)
-                            .show();
+                            .setNegativeButton(getString(android.R.string.ok),
+                                    null).show();
                 }
                 updateView();
             }
@@ -444,9 +442,8 @@ public class StartActivity extends Activity {
                             StartActivity.this);
                     builder.setTitle("Change Password Failed")
                             .setMessage(msg)
-                            .setNegativeButton(
-                                    getString(android.R.string.ok), null)
-                            .show();
+                            .setNegativeButton(getString(android.R.string.ok),
+                                    null).show();
                 }
                 updateView();
             }
