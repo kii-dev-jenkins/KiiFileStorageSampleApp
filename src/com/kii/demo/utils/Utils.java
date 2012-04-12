@@ -296,6 +296,10 @@ public class Utils {
                 return "Update";
             case ActionType.ACTION_UPLOAD:
                 return "Upload";
+            case ActionType.ACTION_EMPTY_TRASH:
+            	return "Empty trash";
+            case ActionType.ACTION_DELETE:
+            	return "Delete";
             default:
                 break;
         }

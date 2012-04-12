@@ -56,7 +56,7 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onUploadCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_UPLOAD, token, success);
         if (mUploadQueue.containsKey(token)) {
             mUploadQueue.remove(token);
         }
@@ -79,7 +79,7 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onUpdateCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_UPDATE, token, success);
         if (mUpdateQueue.containsKey(token)) {
             mUpdateQueue.remove(token);
         }
@@ -88,15 +88,14 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onDownloadBodyCompleted(int token, boolean success,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_DOWNLOAD, token, success);
         if (mDownQueue.containsKey(token)) {
             mDownQueue.remove(token);
         }
     }
 
-    private void showTaskCompleteToast(int token, boolean success) {
+    private void showTaskCompleteToast(int action, int token, boolean success) {
         if (mTokenMap.containsKey(token)) {
-            int action = mTokenMap.get(token);
             Toast.makeText(mContext,
                     Utils.getUserActionString(action, success),
                     Toast.LENGTH_SHORT).show();
@@ -107,37 +106,37 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onRefreshCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_LIST_FILES, token, success);
     }
 
     @Override
     public void onEmptyTrashCompleted(int token, boolean success,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_EMPTY_TRASH, token, success);
     }
 
     @Override
     public void onDeleteCompleted(int token, boolean success,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_DELETE, token, success);
     }
 
     @Override
     public void onMoveTrashCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_TRASH, token, success);
     }
 
     @Override
     public void onRestoreTrashCompleted(int token, boolean success,
             KiiFile file, Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_RESTORE, token, success);
     }
 
     @Override
     public void onListWorkingCompleted(int token, boolean success,
             List<KiiFile> files, Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_LIST_FILES, token, success);
         if (success) {
             mCloudFiles.clear();
             mCloudFiles.addAll(files);
@@ -148,7 +147,7 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onListTrashCompleted(int token, boolean success,
             List<KiiFile> files, Exception exception) {
-        showTaskCompleteToast(token, success);
+        showTaskCompleteToast(ActionType.ACTION_LIST_TRASH, token, success);
         if (success) {
             mTrashFiles.clear();
             mTrashFiles.addAll(files);

@@ -28,4 +28,6 @@ public class ActionType {
     public static final int ACTION_UPDATE = 4;
     public static final int ACTION_TRASH = 5;
     public static final int ACTION_RESTORE = 6;
+    public static final int ACTION_EMPTY_TRASH = 7;
+    public static final int ACTION_DELETE = 8;
 }
