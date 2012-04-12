@@ -206,8 +206,7 @@ public class Utils {
      */
     public static String getKiiFileDownloadPath(KiiFile file) {
         String title = file.getTitle();
-        String downloadFolder = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        String downloadFolder =Environment.getExternalStorageDirectory().getAbsolutePath() ;
         String dest = downloadFolder + "/" + title;
         File f = new File(dest);
         if (f.exists()) {
