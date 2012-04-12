@@ -206,9 +206,6 @@ public class KiiListItemView extends LinearLayout {
                         DateFormat.SHORT, DateFormat.SHORT);
                 String subCaption = Formatter
                         .formatFileSize(mContext, filesize);
-                android.util.Log.d(TAG, "filename is " + filename
-                        + ", caption is " + caption + ", subcaption is "
-                        + subCaption);
                 UiUtils.setTwoLinesText(new SpannableString(filename),
                         new SpannableString(caption), subCaption,
                         R.drawable.icon_format_text, v);
