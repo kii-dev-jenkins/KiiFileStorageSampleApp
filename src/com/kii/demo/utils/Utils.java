@@ -287,7 +287,7 @@ public class Utils {
                 return "Download";
             case ActionType.ACTION_LIST_FILES:
             case ActionType.ACTION_LIST_TRASH:
-                return "List";
+                return "Refresh";
             case ActionType.ACTION_RESTORE:
                 return "Restore";
             case ActionType.ACTION_TRASH:

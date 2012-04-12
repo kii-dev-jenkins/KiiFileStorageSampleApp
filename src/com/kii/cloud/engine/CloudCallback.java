@@ -96,11 +96,15 @@ public class CloudCallback extends KiiFileCallBack {
 
     private void showTaskCompleteToast(int action, int token, boolean success) {
         if (mTokenMap.containsKey(token)) {
-            Toast.makeText(mContext,
-                    Utils.getUserActionString(action, success),
-                    Toast.LENGTH_SHORT).show();
             mTokenMap.remove(token);
         }
+        if(action==ActionType.ACTION_LIST_FILES) {
+            //only show list complete after list trash
+            return;
+        }
+        Toast.makeText(mContext,
+                Utils.getUserActionString(action, success),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -141,7 +145,9 @@ public class CloudCallback extends KiiFileCallBack {
             mCloudFiles.clear();
             mCloudFiles.addAll(files);
         }
-        mContext.sendBroadcast(new Intent(Constants.UI_REFRESH_INTENT));
+        Log.d(TAG, "onListWorkingCompleted");
+        int tk = KiiFile.listTrashedFiles(this, Constants.ANDROID_EXT);
+        addTokenAction(tk, ActionType.ACTION_LIST_TRASH);
     }
 
     @Override
@@ -152,6 +158,7 @@ public class CloudCallback extends KiiFileCallBack {
             mTrashFiles.clear();
             mTrashFiles.addAll(files);
         }
+        Log.d(TAG, "onListTrashCompleted");
         mContext.sendBroadcast(new Intent(Constants.UI_REFRESH_INTENT));
     }
 

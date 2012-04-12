@@ -320,8 +320,9 @@ public class KiiCloudClient {
         int token = KiiFile.listWorkingFiles(mCloudCallback,
                 Constants.ANDROID_EXT);
         mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_FILES);
-        token = KiiFile.listTrashedFiles(mCloudCallback, Constants.ANDROID_EXT);
-        mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_TRASH);
+        //move this to CloudCallBack, onListWorkCompleted()
+        //token = KiiFile.listTrashedFiles(mCloudCallback, Constants.ANDROID_EXT);
+        //mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_TRASH);
     }
 
     public KiiUser getloginUser() {
