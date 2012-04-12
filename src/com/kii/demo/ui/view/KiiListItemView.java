@@ -1,20 +1,20 @@
 //
 //
-//  Copyright 2012 Kii Corporation
-//  http://kii.com
+// Copyright 2012 Kii Corporation
+// http://kii.com
 //
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//  
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 //
 
 package com.kii.demo.ui.view;
@@ -61,21 +61,24 @@ public class KiiListItemView extends LinearLayout {
         super(context);
         init(context, client, mainIcon, listener);
         getFileView(file);
-        addView(v, new LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+        addView(v, new LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
-    public KiiListItemView(Context context, KiiFile file, KiiCloudClient client,
-            Drawable mainIcon, View.OnClickListener listener) {
+    public KiiListItemView(Context context, KiiFile file,
+            KiiCloudClient client, Drawable mainIcon,
+            View.OnClickListener listener) {
         super(context);
         init(context, client, mainIcon, listener);
         getKiiFileView(file);
-        addView(v, new LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+        addView(v, new LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
-    private void init(Context context, KiiCloudClient client, Drawable mainIcon,
-            View.OnClickListener listener) {
+    private void init(Context context, KiiCloudClient client,
+            Drawable mainIcon, View.OnClickListener listener) {
         mContext = context;
         mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,7 +91,8 @@ public class KiiListItemView extends LinearLayout {
         super(context);
         init(context, null, null, null);
         getGroupView(group);
-        addView(v, new LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+        addView(v, new LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
@@ -138,11 +142,11 @@ public class KiiListItemView extends LinearLayout {
     }
 
     private void getDataFromKiiFile(KiiFile file) {
-            filename = file.getTitle();
+        filename = file.getTitle();
         displaytime = file.getModifedTime();
         filesize = file.getFileSize();
         isDirectory = false;
-        if(file.isInTrash()) {
+        if (file.isInTrash()) {
             trashStatus = 2;
         } else {
             trashStatus = 1;
@@ -202,7 +206,9 @@ public class KiiListItemView extends LinearLayout {
                         DateFormat.SHORT, DateFormat.SHORT);
                 String subCaption = Formatter
                         .formatFileSize(mContext, filesize);
-                android.util.Log.d(TAG, "filename is "+filename+", caption is "+caption+", subcaption is "+subCaption);
+                android.util.Log.d(TAG, "filename is " + filename
+                        + ", caption is " + caption + ", subcaption is "
+                        + subCaption);
                 UiUtils.setTwoLinesText(new SpannableString(filename),
                         new SpannableString(caption), subCaption,
                         R.drawable.icon_format_text, v);

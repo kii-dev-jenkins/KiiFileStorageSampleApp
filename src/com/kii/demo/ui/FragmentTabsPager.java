@@ -38,8 +38,8 @@ import com.kii.demo.ui.fragments.KiiFileFragment;
  * to move between the tabs.
  */
 public class FragmentTabsPager extends FragmentActivity {
-    private static FileListFragment mFileFragment = null;
-    private static KiiFileFragment mKiiFragment = null;
+    private FileListFragment mFileFragment = null;
+    private KiiFileFragment mKiiFragment = null;
 
     public static class AlertDialogFragment extends DialogFragment {
         private int id;
@@ -130,6 +130,38 @@ public class FragmentTabsPager extends FragmentActivity {
         outState.putString("tab", mTabHost.getCurrentTabTag());
     }
 
+    static final class TabInfo {
+        private final String tag;
+        private final Class<?> clss;
+        private final Bundle args;
+
+        TabInfo(String _tag, Class<?> _class, Bundle _args) {
+            tag = _tag;
+            clss = _class;
+            args = _args;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+    }
+
+    static class DummyTabFactory implements TabHost.TabContentFactory {
+        private final Context mContext;
+
+        public DummyTabFactory(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public View createTabContent(String tag) {
+            View v = new View(mContext);
+            v.setMinimumWidth(0);
+            v.setMinimumHeight(0);
+            return v;
+        }
+    }
+
     /**
      * This is a helper class that implements the management of tabs and all
      * details of connecting a ViewPager with associated TabHost. It relies on a
@@ -141,44 +173,12 @@ public class FragmentTabsPager extends FragmentActivity {
      * switch to the correct paged in the ViewPager whenever the selected tab
      * changes.
      */
-    public static class TabsAdapter extends FragmentPagerAdapter implements
+    private class TabsAdapter extends FragmentPagerAdapter implements
             TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
         private final Context mContext;
         private final TabHost mTabHost;
         private final ViewPager mViewPager;
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-
-        static final class TabInfo {
-            private final String tag;
-            private final Class<?> clss;
-            private final Bundle args;
-
-            TabInfo(String _tag, Class<?> _class, Bundle _args) {
-                tag = _tag;
-                clss = _class;
-                args = _args;
-            }
-
-            public String getTag() {
-                return tag;
-            }
-        }
-
-        static class DummyTabFactory implements TabHost.TabContentFactory {
-            private final Context mContext;
-
-            public DummyTabFactory(Context context) {
-                mContext = context;
-            }
-
-            @Override
-            public View createTabContent(String tag) {
-                View v = new View(mContext);
-                v.setMinimumWidth(0);
-                v.setMinimumHeight(0);
-                return v;
-            }
-        }
 
         public TabsAdapter(FragmentActivity activity, TabHost tabHost,
                 ViewPager pager) {
