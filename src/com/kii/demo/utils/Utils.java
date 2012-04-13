@@ -224,8 +224,9 @@ public class Utils {
     }
 
     public static Drawable getThumbnailByResize(byte[] thumbnail) {
+        Bitmap bitmap = null;
         try {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(thumbnail, 0,
+            bitmap = BitmapFactory.decodeByteArray(thumbnail, 0,
                     thumbnail.length);
             if (bitmap.getHeight() > 120) {
                 // resize the bitmap if too big, save memory
@@ -236,6 +237,10 @@ public class Utils {
             return new BitmapDrawable(bitmap);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if(bitmap!=null) {
+                bitmap.recycle();
+            }
         }
         return null;
     }
