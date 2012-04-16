@@ -67,7 +67,9 @@ public class CloudCallback extends KiiFileCallBack {
                 @Override
                 public void run() {
                     try {
-                        f.delete();
+                        if (f != null) {
+                            f.delete();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
