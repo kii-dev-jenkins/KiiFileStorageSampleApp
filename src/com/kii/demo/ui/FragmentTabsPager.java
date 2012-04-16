@@ -24,9 +24,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
+import com.kii.cloud.engine.ActionType;
 import com.kii.cloud.engine.KiiCloudClient;
 import com.kii.demo.R;
 import com.kii.demo.ui.fragments.FileListFragment;
@@ -99,15 +101,13 @@ public class FragmentTabsPager extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(false);
         setContentView(R.layout.fragment_tabs_pager);
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
-
         mViewPager = (ViewPager) findViewById(R.id.pager);
-
         mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
-
         mTabsAdapter.addTab(
                 mTabHost.newTabSpec(TAG_DEVICE).setIndicator(
                         getString(R.string.tab_device),
@@ -121,6 +121,7 @@ public class FragmentTabsPager extends FragmentActivity {
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+        KiiCloudClient.getInstance(this).setActivity(this);
         KiiCloudClient.getInstance(this).refresh();
     }
 
@@ -260,5 +261,43 @@ public class FragmentTabsPager extends FragmentActivity {
         public void onPageScrollStateChanged(int state) {
         }
     }
+    
 
+    public void startProgress(int action) {
+        switch(action) {
+            case ActionType.ACTION_DELETE:
+                setTitle("Deleting");
+                break;
+            case ActionType.ACTION_DOWNLOAD:
+                setTitle("Downloading");
+                break;
+            case ActionType.ACTION_EMPTY_TRASH:
+                setTitle("Deleting");
+                break;
+            case ActionType.ACTION_LIST_FILES:
+                setTitle("Refreshing");
+                break;
+            case ActionType.ACTION_LIST_TRASH:
+                setTitle("Refreshing");
+                break;
+            case ActionType.ACTION_RESTORE:
+                setTitle("Restoring");
+                break;
+            case ActionType.ACTION_TRASH:
+                setTitle("Moving to trash");
+                break;
+            case ActionType.ACTION_UPDATE:
+                setTitle("Updating");
+                break;
+            case ActionType.ACTION_UPLOAD:
+                setTitle("Uploading");
+                break;
+        }
+        setProgressBarIndeterminateVisibility(true);
+    }
+    
+    public void stopProgress() {
+        setProgressBarIndeterminateVisibility(false);
+        setTitle(getString(R.string.app_name));
+    }
 }

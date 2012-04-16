@@ -168,6 +168,9 @@ public class CloudCallback extends KiiFileCallBack {
         }
         Log.d(TAG, "onListTrashCompleted");
         mContext.sendBroadcast(new Intent(Constants.UI_REFRESH_INTENT));
+        if(KiiCloudClient.getInstance(mContext).mActivity!=null) {
+            KiiCloudClient.getInstance(mContext).mActivity.stopProgress();
+        }
     }
 
     @Override

@@ -33,6 +33,7 @@ import com.kii.cloud.storage.KiiClient;
 import com.kii.cloud.storage.KiiFile;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.callback.KiiUserCallBack;
+import com.kii.demo.ui.FragmentTabsPager;
 import com.kii.demo.utils.Utils;
 
 /**
@@ -60,6 +61,8 @@ public class KiiCloudClient {
     public static final String CATEGORY_BACKUP = "backup";
 
     private static CloudCallback mCloudCallback;
+    
+    FragmentTabsPager mActivity = null;
 
     /**
      * Change the password of the user.
@@ -129,6 +132,10 @@ public class KiiCloudClient {
         }
         return mInstance;
     }
+    
+    public void setActivity(FragmentTabsPager activity) {
+        mActivity = activity;
+    }
 
     /**
      * Get a list of files are backup Non Blocking Call
@@ -154,6 +161,9 @@ public class KiiCloudClient {
             mCloudCallback.addTokenAction(token, TaskType.FileTask.UPDATE);
             mCloudCallback.addToUploadQueue(token, file);
         }
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_UPDATE);
+        }
         return CloudMsg.OK;
     }
 
@@ -172,7 +182,9 @@ public class KiiCloudClient {
         if (deleteLocal) {
             File f = new File(file.getLocalPath());
             f.delete();
-        } else {
+        } 
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_DELETE);
         }
         return ret;
     }
@@ -239,8 +251,9 @@ public class KiiCloudClient {
         int ret = f.upload(mCloudCallback);
         mCloudCallback.addToUploadQueue(ret, f);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.UPLOAD);
-        android.util.Log.d(TAG, "upload: " + file.getAbsolutePath()
-                + " result is " + ret);
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_UPLOAD);
+        }
         return ret;
     }
 
@@ -253,6 +266,9 @@ public class KiiCloudClient {
     public int moveKiiFileToTrash(KiiFile file) {
         int ret = file.moveToTrash(mCloudCallback);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.MOVE_TRASH);
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_TRASH);
+        }
         return ret;
     }
 
@@ -265,6 +281,9 @@ public class KiiCloudClient {
     public int restoreFromTrash(KiiFile file) {
         int ret = file.restoreFromTrash(mCloudCallback);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.RESTORE_TRASH);
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_RESTORE);
+        }
         return ret;
     }
 
@@ -280,6 +299,9 @@ public class KiiCloudClient {
         }
         mCloudCallback.addToDownQueue(ret, file);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.DOWNLOAD);
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_DOWNLOAD);
+        }
         return ret;
     }
 
@@ -320,9 +342,9 @@ public class KiiCloudClient {
         int token = KiiFile.listWorkingFiles(mCloudCallback,
                 Constants.ANDROID_EXT);
         mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_FILES);
-        //move this to CloudCallBack, onListWorkCompleted()
-        //token = KiiFile.listTrashedFiles(mCloudCallback, Constants.ANDROID_EXT);
-        //mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_TRASH);
+        if(mActivity!=null) {
+            mActivity.startProgress(ActionType.ACTION_LIST_FILES);
+        }
     }
 
     public KiiUser getloginUser() {
