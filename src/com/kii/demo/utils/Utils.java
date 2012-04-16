@@ -238,9 +238,6 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(bitmap!=null) {
-                bitmap.recycle();
-            }
         }
         return null;
     }

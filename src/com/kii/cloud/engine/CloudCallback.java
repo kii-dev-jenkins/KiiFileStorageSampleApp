@@ -74,6 +74,7 @@ public class CloudCallback extends KiiFileCallBack {
                 }
             }).start();
         }
+        doRefresh();
     }
 
     @Override
@@ -83,6 +84,7 @@ public class CloudCallback extends KiiFileCallBack {
         if (mUpdateQueue.containsKey(token)) {
             mUpdateQueue.remove(token);
         }
+        doRefresh();
     }
 
     @Override
@@ -92,18 +94,18 @@ public class CloudCallback extends KiiFileCallBack {
         if (mDownQueue.containsKey(token)) {
             mDownQueue.remove(token);
         }
+        doRefresh();
     }
 
     private void showTaskCompleteToast(int action, int token, boolean success) {
         if (mTokenMap.containsKey(token)) {
             mTokenMap.remove(token);
         }
-        if(action==ActionType.ACTION_LIST_FILES) {
-            //only show list complete after list trash
+        if (action == ActionType.ACTION_LIST_FILES) {
+            // only show list complete after list trash
             return;
         }
-        Toast.makeText(mContext,
-                Utils.getUserActionString(action, success),
+        Toast.makeText(mContext, Utils.getUserActionString(action, success),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -117,24 +119,28 @@ public class CloudCallback extends KiiFileCallBack {
     public void onEmptyTrashCompleted(int token, boolean success,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_EMPTY_TRASH, token, success);
+        doRefresh();
     }
 
     @Override
     public void onDeleteCompleted(int token, boolean success,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_DELETE, token, success);
+        doRefresh();
     }
 
     @Override
     public void onMoveTrashCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_TRASH, token, success);
+        doRefresh();
     }
 
     @Override
     public void onRestoreTrashCompleted(int token, boolean success,
             KiiFile file, Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_RESTORE, token, success);
+        doRefresh();
     }
 
     @Override
@@ -215,6 +221,20 @@ public class CloudCallback extends KiiFileCallBack {
 
     KiiFile[] getTrashFiles() {
         return mTrashFiles.toArray(new KiiFile[] {});
+    }
+
+    boolean hasWorkInProgress() {
+        if (mTokenMap.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    void doRefresh() {
+        if (!hasWorkInProgress()) {
+            KiiCloudClient.getInstance(mContext).refresh();
+        }
     }
 
 }
