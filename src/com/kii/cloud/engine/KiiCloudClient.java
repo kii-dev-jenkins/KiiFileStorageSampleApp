@@ -351,7 +351,6 @@ public class KiiCloudClient {
         return KiiClient.getCurrentUser();
     }
 
-    @SuppressLint({ "SdCardPath", "SdCardPath" })
     private static String getRemotePath(String path) {
         File sdroot = Environment.getExternalStorageDirectory();
         String sdpath = sdroot.getAbsolutePath();
