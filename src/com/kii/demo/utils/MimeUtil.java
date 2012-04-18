@@ -27,7 +27,7 @@ import com.kii.cloud.storage.KiiFile;
 import com.kii.demo.R;
 
 public class MimeUtil {
-
+    public static final String TAG = "MimeUtil";
     static HashMap<String, MimeInfo> mimeInfos = new HashMap<String, MimeInfo>();
     static HashMap<String, MimeInfo> fileIcons = new HashMap<String, MimeInfo>();
 
@@ -166,13 +166,15 @@ public class MimeUtil {
         }
         return null;
     }
-
+    
+    public static final String PENDING_MIME = "application/pending";
     public static MimeInfo getInfoByKiiFile(KiiFile file) {
         String title = file.getTitle();
         String mimeType = file.getMimeType();
-        if (!TextUtils.isEmpty(mimeType)) {
+        if (!TextUtils.isEmpty(mimeType)
+                && !mimeType.toLowerCase().contentEquals(PENDING_MIME)) {
             return MimeUtil.getInfoByMimeName(mimeType);
-        } else if (!TextUtils.isEmpty(mimeType)) {
+        } else if (!TextUtils.isEmpty(title)) {
             return MimeUtil.getInfoByFileName(title);
         }
         return null;

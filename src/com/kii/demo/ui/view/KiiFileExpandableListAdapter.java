@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import com.kii.cloud.engine.KiiCloudClient;
 import com.kii.cloud.storage.KiiFile;
 import com.kii.demo.utils.MimeInfo;
 import com.kii.demo.utils.MimeUtil;
-import com.kii.demo.utils.UiUtils;
 import com.kii.demo.utils.Utils;
 
 public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
@@ -83,7 +81,7 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
 
             KiiFile[] uploadingFiles = kiiClient.getUploadList();
             if ((uploadingFiles != null) && (uploadingFiles.length > 0)) {
-                itemsList.add(new KiiFileList("Progress", uploadingFiles));
+                itemsList.add(new KiiFileList("Uploading", uploadingFiles));
             }
         } else if (mType == TYPE_DATA) {
             KiiFile[] trashFiles = kiiClient.getTrashFiles();
@@ -132,14 +130,10 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
             view = (KiiListItemView) convertView;
             view.refreshWithNewKiiFile(file, icon);
         }
-        String caption = UiUtils.getKiiFileCaption(file, mType);
-        String subCaption = Formatter.formatFileSize(mContext,
-                file.getFileSize());
-        view.setCaption(caption, subCaption);
         return view;
     }
 
-    private static Drawable getKiiFileMainIcon(KiiFile file) {
+    private Drawable getKiiFileMainIcon(KiiFile file) {
         Drawable icon = null;
         MimeInfo mime = MimeUtil.getInfoByKiiFile(file);
         byte[] sThumbnail = null;
@@ -154,6 +148,9 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
                     icon = Utils.getThumbnailByResize(sThumbnail);
                     ICON_CACHE.put(file.toUri().toString(), icon);
                 }
+            } else {
+                icon = Utils.getThumbnailDrawableByFilename(file.getLocalPath(), mContext);
+                ICON_CACHE.put(file.toUri().toString(), icon);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

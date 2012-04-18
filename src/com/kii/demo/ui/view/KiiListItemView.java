@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class KiiListItemView extends LinearLayout {
     private static final int TYPE_FILE = 1;
     private static final int TYPE_KII_FILE = 2;
     private static final int TYPE_GROUP = 3;
-    
+
     public KiiListItemView(Context context, File file, KiiCloudClient client,
             Drawable mainIcon, View.OnClickListener listener) {
         super(context);
@@ -142,9 +143,20 @@ public class KiiListItemView extends LinearLayout {
     }
 
     private void getDataFromKiiFile(KiiFile file) {
-        filename = file.getTitle();
-        displaytime = file.getModifedTime();
-        filesize = file.getFileSize();
+        if (TextUtils.isEmpty(file.getMimeType())
+                || file.getMimeType().contentEquals(MimeUtil.PENDING_MIME)) {
+            String path = file.getLocalPath();
+            File f = new File(path);
+            if (f.exists()) {
+                filename = f.getName();
+                displaytime = f.lastModified();
+                filesize = f.length();
+            } 
+        } else {
+            filename = file.getTitle();
+            displaytime = file.getModifedTime();
+            filesize = file.getFileSize();
+        }
         isDirectory = false;
         if (file.isInTrash()) {
             trashStatus = 2;
@@ -229,9 +241,4 @@ public class KiiListItemView extends LinearLayout {
         }
     }
 
-    public void setCaption(String caption, String subCaption) {
-        UiUtils.setTwoLinesText(new SpannableString(filename),
-                new SpannableString(caption), subCaption,
-                R.drawable.icon_format_text, v);
-    }
 }

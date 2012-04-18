@@ -201,10 +201,10 @@ public class KiiCloudClient {
 
     private int findTokenByFile(KiiFile file) {
         String localPath = file.getLocalPath();
-        SparseArray<KiiFile> set = mCloudCallback.getUploadQueue();
+        SparseArray<KiiFile> array = mCloudCallback.getUploadQueue();
         if (!TextUtils.isEmpty(localPath)) {
-            for (int i=0; i<set.size(); i++) {
-                KiiFile f = set.get(i);
+            for (int i=0; i<array.size(); i++) {
+                KiiFile f = array.get(array.keyAt(i));
                 if (!TextUtils.isEmpty(f.getLocalPath())
                         && (localPath.contentEquals(f.getLocalPath()))) {
                     return i;
@@ -212,20 +212,20 @@ public class KiiCloudClient {
             }
         }
         String uri = file.toUri().toString();
-        set = mCloudCallback.getUpdateQueue();
+        array = mCloudCallback.getUpdateQueue();
         if (!TextUtils.isEmpty(uri)) {
-            for (int i=0; i<set.size(); i++) {
-                KiiFile f = set.get(i);
+            for (int i=0; i<array.size(); i++) {
+                KiiFile f = array.get(array.keyAt(i));
                 if (!TextUtils.isEmpty(f.getLocalPath())
                         && (localPath.contentEquals(f.getLocalPath()))) {
                     return i;
                 }
             }
         }
-        set = mCloudCallback.getDownQueue();
+        array = mCloudCallback.getDownQueue();
         if (!TextUtils.isEmpty(uri)) {
-            for (int i=0; i<set.size(); i++) {
-                KiiFile f = set.get(i);
+            for (int i=0; i<array.size(); i++) {
+                KiiFile f = array.get(array.keyAt(i));
                 if (!TextUtils.isEmpty(f.getLocalPath())
                         && (localPath.contentEquals(f.getLocalPath()))) {
                     return i;
@@ -310,10 +310,10 @@ public class KiiCloudClient {
     }
 
     public KiiFile[] getDownloadList() {
-        SparseArray<KiiFile> set = mCloudCallback.getDownQueue();
+        SparseArray<KiiFile> array = mCloudCallback.getDownQueue();
         List<KiiFile> filelist = new ArrayList<KiiFile>();
-        for (int i = 0; i < set.size(); i++) {
-            filelist.add(set.get(i));
+        for (int i = 0; i < array.size(); i++) {
+            filelist.add(array.get(array.keyAt(i)));
         }
         return filelist.toArray(new KiiFile[] {});
     }
@@ -324,14 +324,14 @@ public class KiiCloudClient {
      * @return
      */
     public KiiFile[] getUploadList() {
-        SparseArray<KiiFile> set = mCloudCallback.getUpdateQueue();
+        SparseArray<KiiFile> array = mCloudCallback.getUpdateQueue();
         List<KiiFile> filelist = new ArrayList<KiiFile>();
-        for (int i=0; i<set.size(); i++) {
-            filelist.add(set.get(i));
+        for (int i=0; i<array.size(); i++) {
+            filelist.add(array.get(array.keyAt(i)));
         }
-        set = mCloudCallback.getUploadQueue();
-        for (int i=0; i<set.size(); i++) {
-            filelist.add(set.get(i));
+        array = mCloudCallback.getUploadQueue();
+        for (int i=0; i<array.size(); i++) {
+            filelist.add(array.get(array.keyAt(i)));
         }
         return filelist.toArray(new KiiFile[] {});
     }

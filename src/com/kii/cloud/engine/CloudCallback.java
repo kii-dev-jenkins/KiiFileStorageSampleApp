@@ -58,21 +58,9 @@ public class CloudCallback extends KiiFileCallBack {
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_UPLOAD, token, success);
         mUploadQueue.remove(token);
-        final KiiFile f = file;
         if (!success) {
-            // workaround: delete the uploaded kiifile, it is dirty data
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (f != null) {
-                            f.delete();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            Log.d(TAG, "exception is "+exception.getMessage());
+            exception.printStackTrace();
         }
         doRefresh();
     }
@@ -145,7 +133,6 @@ public class CloudCallback extends KiiFileCallBack {
             mCloudFiles.clear();
             mCloudFiles.addAll(files);
         }
-        Log.d(TAG, "onListWorkingCompleted");
         int tk = KiiFile.listTrashedFiles(this, Constants.ANDROID_EXT);
         addTokenAction(tk, ActionType.ACTION_LIST_TRASH);
     }
@@ -158,7 +145,6 @@ public class CloudCallback extends KiiFileCallBack {
             mTrashFiles.clear();
             mTrashFiles.addAll(files);
         }
-        Log.d(TAG, "onListTrashCompleted");
         mContext.sendBroadcast(new Intent(Constants.UI_REFRESH_INTENT));
         if (KiiCloudClient.getInstance(mContext).mActivity != null) {
             KiiCloudClient.getInstance(mContext).mActivity.stopProgress();
@@ -167,13 +153,15 @@ public class CloudCallback extends KiiFileCallBack {
 
     @Override
     public void onTaskCancel(int token) {
-        Log.d(TAG, "onTaskCancel: token is " + token);
         if (mTokenMap.indexOfKey(token) > 0) {
             Toast.makeText(mContext,
                     Utils.getResultString(mTokenMap.get(token), false),
                     Toast.LENGTH_SHORT).show();
             mTokenMap.delete(token);
         }
+        mUploadQueue.delete(token);
+        mUpdateQueue.delete(token);
+        mDownQueue.delete(token);
     }
 
     @Override
