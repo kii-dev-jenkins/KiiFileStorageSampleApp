@@ -3,11 +3,12 @@
 A file backup that uses **Kii Cloud File Storage**. It demonstrates:
 
 - Register and login users
-- Backup a file or folder
+- Backup and download file
+- Move working file to trash and restore from trash 
 - Viewer for working files and trashed files
-- View progress for uploading and downloading
+- Viewer for checkiing the uploading and downloading progress
 
-![Screen shots](https://github.com/kii-dev-jenkins/KiiFileStorageSampleApp/raw/master/doc/screen_shots.jpg)
+![Screen shots](https://github.com/kii-dev-jenkins/KiiFileStorageSampleApp/raw/master/doc/screen_shots.png)
 
 - Show interoperability with Sync SDK, PC and web
 
