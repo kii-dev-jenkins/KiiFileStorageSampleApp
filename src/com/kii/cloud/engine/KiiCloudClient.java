@@ -1,20 +1,20 @@
 //
 //
-//  Copyright 2012 Kii Corporation
-//  http://kii.com
+// Copyright 2012 Kii Corporation
+// http://kii.com
 //
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//  
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 //
 
 package com.kii.cloud.engine;
@@ -22,12 +22,12 @@ package com.kii.cloud.engine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import com.kii.cloud.storage.KiiClient;
 import com.kii.cloud.storage.KiiFile;
@@ -61,7 +61,7 @@ public class KiiCloudClient {
     public static final String CATEGORY_BACKUP = "backup";
 
     private static CloudCallback mCloudCallback;
-    
+
     FragmentTabsPager mActivity = null;
 
     /**
@@ -132,7 +132,7 @@ public class KiiCloudClient {
         }
         return mInstance;
     }
-    
+
     public void setActivity(FragmentTabsPager activity) {
         mActivity = activity;
     }
@@ -161,7 +161,7 @@ public class KiiCloudClient {
             mCloudCallback.addTokenAction(token, TaskType.FileTask.UPDATE);
             mCloudCallback.addToUploadQueue(token, file);
         }
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_UPDATE);
         }
         return CloudMsg.OK;
@@ -182,8 +182,8 @@ public class KiiCloudClient {
         if (deleteLocal) {
             File f = new File(file.getLocalPath());
             f.delete();
-        } 
-        if(mActivity!=null) {
+        }
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_DELETE);
         }
         return ret;
@@ -202,34 +202,34 @@ public class KiiCloudClient {
 
     private int findTokenByFile(KiiFile file) {
         String localPath = file.getLocalPath();
-        Map<Integer, KiiFile> set = mCloudCallback.getUploadQueue();
+        SparseArray<KiiFile> set = mCloudCallback.getUploadQueue();
         if (!TextUtils.isEmpty(localPath)) {
-            for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-                KiiFile f = entry.getValue();
+            for (int i=0; i<set.size(); i++) {
+                KiiFile f = set.get(i);
                 if (!TextUtils.isEmpty(f.getLocalPath())
                         && (localPath.contentEquals(f.getLocalPath()))) {
-                    return entry.getKey();
+                    return i;
                 }
             }
         }
         String uri = file.toUri().toString();
         set = mCloudCallback.getUpdateQueue();
         if (!TextUtils.isEmpty(uri)) {
-            for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-                KiiFile f = entry.getValue();
-                if (!TextUtils.isEmpty(f.toUri().toString())
-                        && (uri.contentEquals(f.toUri().toString()))) {
-                    return entry.getKey();
+            for (int i=0; i<set.size(); i++) {
+                KiiFile f = set.get(i);
+                if (!TextUtils.isEmpty(f.getLocalPath())
+                        && (localPath.contentEquals(f.getLocalPath()))) {
+                    return i;
                 }
             }
         }
         set = mCloudCallback.getDownQueue();
         if (!TextUtils.isEmpty(uri)) {
-            for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-                KiiFile f = entry.getValue();
-                if (!TextUtils.isEmpty(f.toUri().toString())
-                        && (uri.contentEquals(f.toUri().toString()))) {
-                    return entry.getKey();
+            for (int i=0; i<set.size(); i++) {
+                KiiFile f = set.get(i);
+                if (!TextUtils.isEmpty(f.getLocalPath())
+                        && (localPath.contentEquals(f.getLocalPath()))) {
+                    return i;
                 }
             }
         }
@@ -251,7 +251,7 @@ public class KiiCloudClient {
         int ret = f.upload(mCloudCallback);
         mCloudCallback.addToUploadQueue(ret, f);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.UPLOAD);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_UPLOAD);
         }
         return ret;
@@ -266,7 +266,7 @@ public class KiiCloudClient {
     public int moveKiiFileToTrash(KiiFile file) {
         int ret = file.moveToTrash(mCloudCallback);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.MOVE_TRASH);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_TRASH);
         }
         return ret;
@@ -281,7 +281,7 @@ public class KiiCloudClient {
     public int restoreFromTrash(KiiFile file) {
         int ret = file.restoreFromTrash(mCloudCallback);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.RESTORE_TRASH);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_RESTORE);
         }
         return ret;
@@ -299,7 +299,7 @@ public class KiiCloudClient {
         }
         mCloudCallback.addToDownQueue(ret, file);
         mCloudCallback.addTokenAction(ret, TaskType.FileTask.DOWNLOAD);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_DOWNLOAD);
         }
         return ret;
@@ -311,10 +311,10 @@ public class KiiCloudClient {
     }
 
     public KiiFile[] getDownloadList() {
-        Map<Integer, KiiFile> set = mCloudCallback.getDownQueue();
+        SparseArray<KiiFile> set = mCloudCallback.getDownQueue();
         List<KiiFile> filelist = new ArrayList<KiiFile>();
-        for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-            filelist.add(entry.getValue());
+        for (int i = 0; i < set.size(); i++) {
+            filelist.add(set.get(i));
         }
         return filelist.toArray(new KiiFile[] {});
     }
@@ -325,14 +325,14 @@ public class KiiCloudClient {
      * @return
      */
     public KiiFile[] getUploadList() {
-        Map<Integer, KiiFile> set = mCloudCallback.getUpdateQueue();
+        SparseArray<KiiFile> set = mCloudCallback.getUpdateQueue();
         List<KiiFile> filelist = new ArrayList<KiiFile>();
-        for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-            filelist.add(entry.getValue());
+        for (int i=0; i<set.size(); i++) {
+            filelist.add(set.get(i));
         }
         set = mCloudCallback.getUploadQueue();
-        for (Entry<Integer, KiiFile> entry : set.entrySet()) {
-            filelist.add(entry.getValue());
+        for (int i=0; i<set.size(); i++) {
+            filelist.add(set.get(i));
         }
         return filelist.toArray(new KiiFile[] {});
     }
@@ -342,7 +342,7 @@ public class KiiCloudClient {
         int token = KiiFile.listWorkingFiles(mCloudCallback,
                 Constants.ANDROID_EXT);
         mCloudCallback.addTokenAction(token, ActionType.ACTION_LIST_FILES);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startProgress(ActionType.ACTION_LIST_FILES);
         }
     }
@@ -351,6 +351,7 @@ public class KiiCloudClient {
         return KiiClient.getCurrentUser();
     }
 
+    @SuppressLint({ "SdCardPath", "SdCardPath" })
     private static String getRemotePath(String path) {
         File sdroot = Environment.getExternalStorageDirectory();
         String sdpath = sdroot.getAbsolutePath();

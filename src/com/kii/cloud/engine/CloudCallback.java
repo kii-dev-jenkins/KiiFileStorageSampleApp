@@ -22,11 +22,12 @@ package com.kii.cloud.engine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.widget.Toast;
 
 import com.kii.cloud.storage.KiiFile;
@@ -37,17 +38,17 @@ public class CloudCallback extends KiiFileCallBack {
     private Context mContext;
 
     // download
-    private Map<Integer, KiiFile> mDownQueue = new HashMap<Integer, KiiFile>();
+    private SparseArray<KiiFile> mDownQueue = new SparseArray<KiiFile>();
     // local file upload, use filepath as key
-    private Map<Integer, KiiFile> mUploadQueue = new HashMap<Integer, KiiFile>();
+    private SparseArray<KiiFile> mUploadQueue = new SparseArray<KiiFile>();
     // file body updated, use KiiFile#toUri().toString() as key
-    private Map<Integer, KiiFile> mUpdateQueue = new HashMap<Integer, KiiFile>();
+    private SparseArray<KiiFile> mUpdateQueue = new SparseArray<KiiFile>();
     // trash files
     private List<KiiFile> mTrashFiles = new ArrayList<KiiFile>();
     // cloud files
     private List<KiiFile> mCloudFiles = new ArrayList<KiiFile>();
     // token map
-    private Map<Integer, Integer> mTokenMap = new HashMap<Integer, Integer>();
+    private SparseIntArray mTokenMap = new SparseIntArray();
 
     public CloudCallback(Context context) {
         mContext = context.getApplicationContext();
@@ -57,9 +58,7 @@ public class CloudCallback extends KiiFileCallBack {
     public void onUploadCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_UPLOAD, token, success);
-        if (mUploadQueue.containsKey(token)) {
-            mUploadQueue.remove(token);
-        }
+        mUploadQueue.remove(token);
         final KiiFile f = file;
         if (!success) {
             // workaround: delete the uploaded kiifile, it is dirty data
@@ -83,9 +82,7 @@ public class CloudCallback extends KiiFileCallBack {
     public void onUpdateCompleted(int token, boolean success, KiiFile file,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_UPDATE, token, success);
-        if (mUpdateQueue.containsKey(token)) {
-            mUpdateQueue.remove(token);
-        }
+        mUpdateQueue.remove(token);
         doRefresh();
     }
 
@@ -93,16 +90,12 @@ public class CloudCallback extends KiiFileCallBack {
     public void onDownloadBodyCompleted(int token, boolean success,
             Exception exception) {
         showTaskCompleteToast(ActionType.ACTION_DOWNLOAD, token, success);
-        if (mDownQueue.containsKey(token)) {
-            mDownQueue.remove(token);
-        }
+        mDownQueue.remove(token);
         doRefresh();
     }
 
     private void showTaskCompleteToast(int action, int token, boolean success) {
-        if (mTokenMap.containsKey(token)) {
-            mTokenMap.remove(token);
-        }
+        mTokenMap.delete(token);
         if (action == ActionType.ACTION_LIST_FILES) {
             // only show list complete after list trash
             return;
@@ -168,7 +161,7 @@ public class CloudCallback extends KiiFileCallBack {
         }
         Log.d(TAG, "onListTrashCompleted");
         mContext.sendBroadcast(new Intent(Constants.UI_REFRESH_INTENT));
-        if(KiiCloudClient.getInstance(mContext).mActivity!=null) {
+        if (KiiCloudClient.getInstance(mContext).mActivity != null) {
             KiiCloudClient.getInstance(mContext).mActivity.stopProgress();
         }
     }
@@ -176,13 +169,12 @@ public class CloudCallback extends KiiFileCallBack {
     @Override
     public void onTaskCancel(int token) {
         Log.d(TAG, "onTaskCancel: token is " + token);
-        if (mTokenMap.containsKey(token)) {
+        if (mTokenMap.indexOfKey(token) > 0) {
             Toast.makeText(mContext,
                     Utils.getResultString(mTokenMap.get(token), false),
                     Toast.LENGTH_SHORT).show();
-            mTokenMap.remove(token);
+            mTokenMap.delete(token);
         }
-        // TODO: cancel notification
     }
 
     @Override
@@ -194,7 +186,7 @@ public class CloudCallback extends KiiFileCallBack {
         mDownQueue.put(token, file);
     }
 
-    Map<Integer, KiiFile> getDownQueue() {
+    SparseArray<KiiFile> getDownQueue() {
         return mDownQueue;
     }
 
@@ -206,11 +198,11 @@ public class CloudCallback extends KiiFileCallBack {
         mUpdateQueue.put(token, file);
     }
 
-    Map<Integer, KiiFile> getUploadQueue() {
+    SparseArray<KiiFile> getUploadQueue() {
         return mUploadQueue;
     }
 
-    Map<Integer, KiiFile> getUpdateQueue() {
+    SparseArray<KiiFile> getUpdateQueue() {
         return mUpdateQueue;
     }
 
@@ -229,7 +221,7 @@ public class CloudCallback extends KiiFileCallBack {
     }
 
     boolean hasWorkInProgress() {
-        if (mTokenMap.isEmpty()) {
+        if (mTokenMap.size() <= 0) {
             return false;
         } else {
             return true;
