@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -134,24 +135,32 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private Drawable getKiiFileMainIcon(KiiFile file) {
-        Drawable icon = null;
         MimeInfo mime = MimeUtil.getInfoByKiiFile(file);
+        Drawable icon = null;
+        if (mime != null && mime.getIconID() > 0) {
+             icon = mContext.getResources().getDrawable(
+                    mime.getIconID());
+        }
+//        if (ICON_CACHE.containsKey(file.toUri().toString())) {
+//            icon = ICON_CACHE.get(file.toUri().toString());
+//            return icon;
+//        }
         byte[] sThumbnail = null;
         if (mime != null) {
             sThumbnail = file.getThumbnail();
         }
         try {
             if (sThumbnail != null && sThumbnail.length > 0) {
-                if (ICON_CACHE.containsKey(file.toUri().toString())) {
-                    icon = ICON_CACHE.get(file.toUri().toString());
-                } else {
-                    icon = Utils.getThumbnailByResize(sThumbnail);
-                    ICON_CACHE.put(file.toUri().toString(), icon);
-                }
+                icon = Utils.getThumbnailByResize(sThumbnail);
             } else {
-                icon = Utils.getThumbnailDrawableByFilename(file.getLocalPath(), mContext);
-                ICON_CACHE.put(file.toUri().toString(), icon);
+                if (!TextUtils.isEmpty(file.getLocalPath())) {
+                    icon = Utils.getThumbnailDrawableByFilename(
+                            file.getLocalPath(), mContext);
+                }
             }
+//            if (icon != null) {
+//                ICON_CACHE.put(file.toUri().toString(), icon);
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
