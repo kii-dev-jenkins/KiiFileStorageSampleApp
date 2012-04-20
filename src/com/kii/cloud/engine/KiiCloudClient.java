@@ -31,6 +31,7 @@ import android.util.SparseArray;
 import com.kii.cloud.storage.KiiClient;
 import com.kii.cloud.storage.KiiFile;
 import com.kii.cloud.storage.KiiUser;
+import com.kii.cloud.storage.callback.KiiFileProgress;
 import com.kii.cloud.storage.callback.KiiUserCallBack;
 import com.kii.demo.ui.FragmentTabsPager;
 import com.kii.demo.utils.Utils;
@@ -196,32 +197,36 @@ public class KiiCloudClient {
      */
     public boolean cancel(KiiFile file) {
         int token = findTokenByFile(file);
-        return KiiClient.cancelTask(token);
+        if (token > 0) {
+            return KiiClient.cancelTask(token);
+        } else {
+            // no such file in progress, return false
+            return false;
+        }
     }
 
     private int findTokenByFile(KiiFile file) {
         String uri = file.toUri().toString();
         SparseArray<KiiFile> array = mCloudCallback.getUploadQueue();
-        if (!TextUtils.isEmpty(uri)) {
-            for (int i = 0; i < array.size(); i++) {
-                KiiFile f = array.get(array.keyAt(i));
-                if (!TextUtils.isEmpty(f.toUri().toString())
-                        && (uri.contentEquals(f.toUri().toString()))) {
-                    return array.keyAt(i);
-                }
-            }
+        int ret = searchKey(array, uri);
+        if (ret > 0) {
+            return ret;
         }
         array = mCloudCallback.getUpdateQueue();
-        if (!TextUtils.isEmpty(uri)) {
-            for (int i = 0; i < array.size(); i++) {
-                KiiFile f = array.get(array.keyAt(i));
-                if (!TextUtils.isEmpty(f.toUri().toString())
-                        && (uri.contentEquals(f.toUri().toString()))) {
-                    return array.keyAt(i);
-                }
-            }
+        ret = searchKey(array, uri);
+        if (ret > 0) {
+            return ret;
         }
         array = mCloudCallback.getDownQueue();
+        ret = searchKey(array, uri);
+        if (ret > 0) {
+            return ret;
+        }
+        return -1;
+    }
+
+    private int searchKey(SparseArray<KiiFile> array, String uri) {
+        int ret = -1;
         if (!TextUtils.isEmpty(uri)) {
             for (int i = 0; i < array.size(); i++) {
                 KiiFile f = array.get(array.keyAt(i));
@@ -231,7 +236,7 @@ public class KiiCloudClient {
                 }
             }
         }
-        return -1;
+        return ret;
     }
 
     /**
@@ -360,5 +365,13 @@ public class KiiCloudClient {
         } else {
             return "";
         }
+    }
+
+    public KiiFileProgress getProgress(KiiFile file) {
+        int token = findTokenByFile(file);
+        if (token > 0) {
+            return mCloudCallback.mProgressArray.get(token);
+        }
+        return null;
     }
 }

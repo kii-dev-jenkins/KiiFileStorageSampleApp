@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.kii.cloud.storage.KiiFile;
 import com.kii.cloud.storage.callback.KiiFileCallBack;
+import com.kii.cloud.storage.callback.KiiFileProgress;
 import com.kii.demo.utils.Utils;
 
 public class CloudCallback extends KiiFileCallBack {
@@ -38,16 +39,18 @@ public class CloudCallback extends KiiFileCallBack {
 
     // download
     private SparseArray<KiiFile> mDownQueue = new SparseArray<KiiFile>();
-    // local file upload, use filepath as key
+    // local file upload in queue
     private SparseArray<KiiFile> mUploadQueue = new SparseArray<KiiFile>();
-    // file body updated, use KiiFile#toUri().toString() as key
+    // file body update in queue
     private SparseArray<KiiFile> mUpdateQueue = new SparseArray<KiiFile>();
-    // trash files
+    // local cache of trash files
     private List<KiiFile> mTrashFiles = new ArrayList<KiiFile>();
-    // cloud files
+    // local cache of cloud files
     private List<KiiFile> mCloudFiles = new ArrayList<KiiFile>();
     // token map
     private SparseIntArray mTokenMap = new SparseIntArray();
+    // progress 
+    SparseArray<KiiFileProgress> mProgressArray = new SparseArray<KiiFileProgress>();
 
     public CloudCallback(Context context) {
         mContext = context.getApplicationContext();
@@ -83,6 +86,7 @@ public class CloudCallback extends KiiFileCallBack {
 
     private void showTaskCompleteToast(int action, int token, boolean success) {
         mTokenMap.delete(token);
+        mProgressArray.delete(token);
         if (action == ActionType.ACTION_LIST_FILES) {
             // only show list complete after list trash
             return;
@@ -157,11 +161,12 @@ public class CloudCallback extends KiiFileCallBack {
             Toast.makeText(mContext,
                     Utils.getResultString(mTokenMap.get(token), false),
                     Toast.LENGTH_SHORT).show();
-            mTokenMap.delete(token);
         }
+        mTokenMap.delete(token);
         mUploadQueue.delete(token);
         mUpdateQueue.delete(token);
         mDownQueue.delete(token);
+        mProgressArray.delete(token);
     }
 
     @Override
@@ -219,5 +224,13 @@ public class CloudCallback extends KiiFileCallBack {
         if (!hasWorkInProgress()) {
             KiiCloudClient.getInstance(mContext).refresh();
         }
+    }
+
+    @Override
+    public void onProgressUpdate(int token, KiiFileProgress progress) {
+        Log.d(TAG, "onProgressUpdate, token is " + token + ", progress is "
+                + progress.getStatus() + ", total " + progress.getTotalSize()
+                + " Bytes, current " + progress.getCurrentSize() + " Bytes");
+        mProgressArray.put(token, progress);
     }
 }

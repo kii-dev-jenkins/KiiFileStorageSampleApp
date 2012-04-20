@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 
 import com.kii.cloud.engine.KiiCloudClient;
 import com.kii.cloud.storage.KiiFile;
+import com.kii.cloud.storage.callback.KiiFileProgress;
 import com.kii.demo.R;
 import com.kii.demo.utils.MimeInfo;
 import com.kii.demo.utils.MimeUtil;
@@ -56,6 +57,7 @@ public class KiiListItemView extends LinearLayout {
     private static final int TYPE_FILE = 1;
     private static final int TYPE_KII_FILE = 2;
     private static final int TYPE_GROUP = 3;
+    private KiiFile mKiiFile = null;
 
     public KiiListItemView(Context context, File file, KiiCloudClient client,
             Drawable mainIcon, View.OnClickListener listener) {
@@ -128,6 +130,7 @@ public class KiiListItemView extends LinearLayout {
     }
 
     private void getKiiFileView(KiiFile file) {
+        mKiiFile = file;
         type = TYPE_KII_FILE;
         getDataFromKiiFile(file);
         bindView();
@@ -146,12 +149,14 @@ public class KiiListItemView extends LinearLayout {
         if (TextUtils.isEmpty(file.getMimeType())
                 || file.getMimeType().contentEquals(MimeUtil.PENDING_MIME)) {
             String path = file.getLocalPath();
-            File f = new File(path);
-            if (f.exists()) {
-                filename = f.getName();
-                displaytime = f.lastModified();
-                filesize = f.length();
-            } 
+            if (!TextUtils.isEmpty(path)) {
+                File f = new File(path);
+                if (f.exists()) {
+                    filename = f.getName();
+                    displaytime = f.lastModified();
+                    filesize = f.length();
+                }
+            }
         } else {
             filename = file.getTitle();
             displaytime = file.getModifedTime();
@@ -218,6 +223,15 @@ public class KiiListItemView extends LinearLayout {
                         DateFormat.SHORT, DateFormat.SHORT);
                 String subCaption = Formatter
                         .formatFileSize(mContext, filesize);
+                if (mKiiFile != null) {
+                    KiiFileProgress progress = KiiCloudClient.getInstance(
+                            mContext).getProgress(mKiiFile);
+                    if (progress != null) {
+                        String currentSize = Formatter.formatFileSize(mContext,
+                                progress.getCurrentSize());
+                        subCaption = currentSize + "/" + subCaption;
+                    }
+                }
                 UiUtils.setTwoLinesText(new SpannableString(filename),
                         new SpannableString(caption), subCaption,
                         R.drawable.icon_format_text, v);
