@@ -20,7 +20,6 @@
 package com.kii.demo.ui.view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -47,7 +46,7 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
 
     KiiCloudClient kiiClient = null;
 
-    private static HashMap<String, Drawable> ICON_CACHE = new HashMap<String, Drawable>();
+//    private static HashMap<String, Drawable> ICON_CACHE = new HashMap<String, Drawable>();
 
     private int mType = -1;
     public static final int TYPE_DATA = 1;
@@ -68,7 +67,7 @@ public class KiiFileExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public void notifyDataSetChanged() {
         itemsList = new ArrayList<KiiFileList>();
-        ICON_CACHE.clear();
+//        ICON_CACHE.clear();
         addDataSet(itemsList);
         super.notifyDataSetChanged();
     }

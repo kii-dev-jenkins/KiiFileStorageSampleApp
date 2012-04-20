@@ -59,7 +59,7 @@ public class CloudCallback extends KiiFileCallBack {
         showTaskCompleteToast(ActionType.ACTION_UPLOAD, token, success);
         mUploadQueue.remove(token);
         if (!success) {
-            Log.d(TAG, "exception is "+exception.getMessage());
+            Log.d(TAG, "exception is " + exception.getMessage());
             exception.printStackTrace();
         }
         doRefresh();
@@ -220,5 +220,4 @@ public class CloudCallback extends KiiFileCallBack {
             KiiCloudClient.getInstance(mContext).refresh();
         }
     }
-
 }
